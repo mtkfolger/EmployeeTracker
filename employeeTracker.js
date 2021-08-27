@@ -1,5 +1,6 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const functions = require ('./functions.js')
 
 const connection = mysql.CreateConnection({
     host: 'localhost',
