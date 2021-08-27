@@ -1,7 +1,28 @@
 //Creating the functions for various prompts
 
+const inquirer = require("inquirer")
+
 //function to add a department
-departmentAdd()
+const departmentAdd = () => {
+    inquirer
+        .prompt([{
+            name: `departmentAdd`,
+            type: `input`,
+            message: `Which department would you like to add?`,
+        }])
+        .then((answer) => {
+            connection.query(
+                "INSERT INTO department SET ?" , {
+                    name: answer.departmentAdd
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("Added " + answer.departmentAdd + " Department.");
+                    mainPrompt();
+                }
+            )
+        })
+}
 
 //function to add a role
 roleAdd()
