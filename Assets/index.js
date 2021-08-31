@@ -1,18 +1,15 @@
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
-const functions = require('./functions.js');
-const { connect } = require('http2');
 
-const connection = mysql.CreateConnection({
-    host: 'localhost',
+const connection = mysql.createConnection({
+    port: 3306,
     user: 'root',
     database: 'employeeTracker_db',
-    port: 3001,
-    password: 'folger'
+    password: 'Folger8246!'
 
 });
 
-connection.connection((err) => {
+connection.connect((err) => {
     if (err) throw err;
     mainPrompt();
 });
@@ -208,7 +205,7 @@ const employeeAdd = () => {
                         }
                         ])
                         .then((answer) => {
-                            const managerChosen = results.find(item = item.first_name === answer.manager_id)
+                            const managerChosen = results.find(item => item.first_name === answer.manager_id)
 
                             connection.query(
                                 "INSERT INTO employee SET ?", {
@@ -231,7 +228,7 @@ const employeeAdd = () => {
 
 //function to view all departments
 const departmentView = () => {
-    connection.query("SELET * FROM department", (err, res) => {
+    connection.query("SELECT * FROM department", (err, res) => {
         if (err) throw err;
         console.table(res)
         mainPrompt();
@@ -249,7 +246,7 @@ const roleView = () => {
 
 //function to view all employees
 const employeeView = () => {
-    connection.query("SELET * FROM employee", (err, res) => {
+    connection.query("SELECT * FROM employee", (err, res) => {
         if (err) throw err;
         console.table(res)
         mainPrompt();
@@ -283,7 +280,7 @@ const employeeManagerView = () => {
 
 //function to view a department's budget
 const departmentBudget = () => {
-    connection.query("SELET * FROM department", function (err, results) {
+    connection.query("SELECT * FROM department", function (err, results) {
         if (err) throw err;
         inquirer
             .prompt([{
@@ -297,7 +294,7 @@ const departmentBudget = () => {
             .then((answer) => {
                 const departmentBudget1 = results.find(item => item.name === answer.departmentBudget)
                 const departmentBudget2 = departmentBudget1.id
-                connection.query("SELET SUM(salary) as Total_Department_Budget FROM role WHERE department_id = " + "'" + departmentBudget2 + "'", (err, res) => {
+                connection.query("SELECT SUM(salary) as Total_Department_Budget FROM role WHERE department_id = " + "'" + departmentBudget2 + "'", (err, res) => {
                     if (err) throw err;
                     console.table(res)
                     mainPrompt()
@@ -308,7 +305,7 @@ const departmentBudget = () => {
 
 //function to update employee information
 const employeeUpdate = () => {
-    connection.query("SELET * FROM employee", function (err, results) {
+    connection.query("SELECT * FROM employee", function (err, results) {
         if (err) throw err;
         inquirer
             .prompt([{
@@ -321,7 +318,7 @@ const employeeUpdate = () => {
 
             .then((answer) => {
                 const updateEmployee = (answer.employeeUpdate)
-                connection.query("SELECT ( from role", function (err, results) {
+                connection.query("SELECT * from role", function (err, results) {
                     if (err) throw err;
                     inquirer
                         .prompt([{
@@ -340,7 +337,7 @@ const employeeUpdate = () => {
                             },
                                 function (err) {
                                     if (err) throw err;
-                                    console.log("Successfull updated " + updateEmployee + "'s role to " + answer.role_id + ".");
+                                    console.log("Successfully updated " + updateEmployee + "'s role to " + answer.role_id + ".");
                                     mainPrompt();
                                 }
                             )
@@ -352,7 +349,7 @@ const employeeUpdate = () => {
 
 //function to update an employee's manager
 const employeeManagerUpdate = () => {
-    connection.query("SELET * FROM employee", function (err, results) {
+    connection.query("SELECT * FROM employee", function (err, results) {
         if (err) throw err;
         inquirer
             .prompt([{
@@ -365,7 +362,7 @@ const employeeManagerUpdate = () => {
 
             .then((answer) => {
                 const updateEmployeeManager = (answer.employeeUpdateManager)
-                connection.query("SELET ( FROM employee", function (err, results) {
+                connection.query("SELECT * FROM employee", function (err, results) {
                     if (err) throw err;
                     inquirer
                         .prompt([{
@@ -459,9 +456,8 @@ const employeeRemove = () => {
                 message: `Please select the employee you'd like to remove:`,
                 choices: results.map(item => item.first_name),
             },
-            ]
-
-                .then((answer) => {
+            ])
+            .then((answer) => {
                     const employeeRemove1 = results.find(item => item.first_name === answer.employeeDeleteName)
                     const employeeRemove2 = employeeRemove1.id
                     connection.query("DELETE FROM employee WHERE id = " + "'" + employeeRemove2 + "'",
@@ -472,8 +468,6 @@ const employeeRemove = () => {
                         }
                     )
                 })
-            )
-    }
-    )
-
+            })
+        
 }
