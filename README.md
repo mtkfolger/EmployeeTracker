@@ -1,7 +1,7 @@
 **Employee Tracker**
 ---
 **Video Walkthrough**
->To view the video walkthrough, click <a href="https://www.google.com" target="_blank">here!</a>
+>To view the video walkthrough, click <a href="https://drive.google.com/file/d/1OND5Pqcj6PJ2sO1GCBjnIy5iiFnlSK4k/view" target="_blank">here!</a>
 
 **Description**
 >This application is designed for business owners to manage and track departments, roles, and  employees in an organized and efficient manner.
